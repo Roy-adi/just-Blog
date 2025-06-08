@@ -17,6 +17,20 @@ const blogPostsSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    category: {
+      type: String,
+      enum: [
+        "Technology",
+        "Health",
+        "Lifestyle",
+        "Travel",
+        "Food",
+        "Education",
+        "Finance",
+        "Entertainment",
+        "Sports",
+      ],
+    },
     authorid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

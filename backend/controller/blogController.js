@@ -6,7 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 // Controller to create a new blog post
 export const createBlogPost = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description,category } = req.body;
     const author_id = req.user._id;
 
     const user = await User.findById(author_id);
@@ -31,6 +31,7 @@ export const createBlogPost = async (req, res) => {
     const newBlogPost = new BlogPost({
       title,
       description,
+      category,
       authorid: author_id,
       authorname,
       blogImg,
@@ -49,16 +50,38 @@ export const createBlogPost = async (req, res) => {
   }
 };
 
+// Controller to get blogs by category
+export const getBlogsByCategory = async (req, res) => {
+  try {
+    const { category } = req.body;
+
+    let filter = {};
+    if (category && category.trim().toLowerCase() !== "all" && category.trim() !== "") {
+      filter.category = category;
+    }
+
+    const blogs = await BlogPost.find(filter);
+
+    return res.status(200).json({
+      success: true,
+      count: blogs.length,
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs by category:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
+
 // Controller to edit a blog post
 export const editBlogPost = async (req, res) => {
-      console.log("Received Request Body:", req.body);
-    console.log("Received Request Files:", req.files);
   try {
     const { id } = req.params;
-     const { title, description } = req.body;
+     const { title, description,category } = req.body;
     const current_user_id = req.user._id;
-
-    console.log(req.body, 'clg1');
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid blog post ID." });
@@ -118,6 +141,7 @@ export const editBlogPost = async (req, res) => {
     }
 
     blogPost.title = title || blogPost.title;
+    blogPost.category = category || blogPost.category;
     blogPost.description = description || blogPost.description;
     blogPost.blogImg = blogImg;
     blogPost.blogImgPublicId = blogImgPublicId; // Update with new or null public_id

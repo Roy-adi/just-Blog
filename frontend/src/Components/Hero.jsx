@@ -1,12 +1,12 @@
 import React from 'react'
+import blogimg from '../assets/blogHero.jpg'
 
 const Hero = () => {
   return (
     <div
       className="hero-section text-white d-flex align-items-end"
       style={{
-        backgroundImage:
-          "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80')",
+        backgroundImage: `url(${blogimg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "80vh",

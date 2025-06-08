@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBlogPost, deleteBlogPost, editBlogPost, getAllBlogPosts, getBlogPost } from "../controller/blogController.js";
+import { createBlogPost, deleteBlogPost, editBlogPost, getAllBlogPosts, getBlogPost, getBlogsByCategory } from "../controller/blogController.js";
 import { authenticateToken } from "../middleware/jwtverify.js";
 import upload from '../middleware/multer.js'
 
@@ -21,5 +21,8 @@ router.route("/blog/:id").get(getBlogPost);
 
 // Optional: Route to get all blog posts
 router.route("/blogs").get(getAllBlogPosts);
+
+// Route to get blog posts by category
+router.post("/blogs/category", getBlogsByCategory);
 
 export default router;
