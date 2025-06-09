@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useApiCallContext } from "../context/ApiCallProvider";
 import { useParams } from "react-router-dom";
@@ -18,31 +19,36 @@ const BlogDetails = () => {
     },
   ]);
   const [newComment, setNewComment] = useState("");
-  const [newCommentAuthor, setNewCommentAuthor] = useState("");
-  const { getBlogDetails, BlogDetails } = useApiCallContext();
+  const {
+    getBlogDetails,
+    BlogDetails,
+    getBlogCommentList,
+    BlogCommentList,
+    Createcomment,
+  } = useApiCallContext();
   const { id } = useParams();
 
   // Fetch blog details when the component mounts
 
   useEffect(() => {
     getBlogDetails(id);
+    getBlogCommentList(id);
   }, [id]);
 
-  console.log(BlogDetails, "BlogDetails");
+  console.log(BlogCommentList, "BlogCommentList");
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (newComment.trim() && newCommentAuthor.trim()) {
-      const newCommentObj = {
-        id: comments.length + 1,
-        author: newCommentAuthor,
-        text: newComment,
-        timestamp: new Date().toISOString(),
-      };
-      setComments([...comments, newCommentObj]);
-      setNewComment("");
-      setNewCommentAuthor("");
+    if (newComment.trim() === "") {
+      return; // Prevent empty comments
     }
+    const commentData = {
+      text: newComment,
+      id: id,
+    };
+    await Createcomment(commentData);
+    setNewComment("");
+    getBlogCommentList(id);
   };
 
   const getDaysAgo = (createdAt) => {
@@ -110,52 +116,42 @@ const BlogDetails = () => {
         {/* Comments */}
         <div className="border-top pt-5">
           <h2 style={{ fontWeight: "700", fontSize: "2rem" }} className="mb-4">
-            Comments
+            Leave your Comments
           </h2>
 
           {/* Comment Form */}
           <div className="bg-light p-4 rounded shadow-sm mb-4">
-            <h4 className="mb-3" style={{ fontWeight: "600" }}>
-              Leave a Comment
-            </h4>
+            
             <form onSubmit={handleCommentSubmit}>
               <div className="mb-3">
-                <label htmlFor="commentAuthor" style={{ fontWeight: "500" }}>
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="commentAuthor"
-                  value={newCommentAuthor}
-                  onChange={(e) => setNewCommentAuthor(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="commentText" style={{ fontWeight: "500" }}>
-                  Your Comment
-                </label>
                 <textarea
                   className="form-control"
                   id="commentText"
                   rows="4"
                   value={newComment}
+                  placeholder="Write your comment here..."
                   onChange={(e) => setNewComment(e.target.value)}
                   required
                 />
               </div>
               <button className="btn btn-primary btn-lg" type="submit">
-                Post Comment
+                Post
               </button>
             </form>
           </div>
 
           {/* Comment List */}
-          {comments.length > 0 ? (
-            <div>
-              {comments.map((comment) => (
-                <div key={comment.id} className="card mb-3 p-3">
+
+          {BlogCommentList?.length > 0 ? (
+            <div
+              style={{
+                maxHeight: "300px",
+                overflowY: "auto",
+                paddingRight: "10px",
+              }}
+            >
+              {BlogCommentList?.map((comment) => (
+                <div key={comment._id} className="card mb-3 p-3">
                   <h6 className="mb-1" style={{ fontWeight: "700" }}>
                     {comment.author}
                   </h6>
@@ -163,7 +159,7 @@ const BlogDetails = () => {
                     className="text-muted mb-2"
                     style={{ fontSize: "0.875rem" }}
                   >
-                    {formatTimestamp(comment.timestamp)}
+                    {formatTimestamp(comment.createdAt)}
                   </p>
                   <p className="text-secondary mb-0">{comment.text}</p>
                 </div>

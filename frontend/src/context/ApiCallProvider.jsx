@@ -13,6 +13,7 @@ export const ApiCallProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
   const [blogData, setblogData] = useState([]);
   const [BlogDetails, setblogDetails] = useState([]);
+  const [BlogCommentList, setBlogCommentList] = useState([]);
 
   const loginUser = async (dataToSend) => {
     try {
@@ -138,7 +139,43 @@ export const ApiCallProvider = ({ children }) => {
     }
   };
 
-  const values = { loginUser, SignUpUser, CreateBlog, getBlogPostList, blogData,getBlogDetails,BlogDetails };
+    const getBlogCommentList = async (id) => {
+    try {
+      const response = await axios.get(`${base_url}/blogs/${id}/comments`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      setBlogCommentList(response.data);
+    } catch (error) {
+      // Handle the error
+      console.error(
+        "details failed:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+    const Createcomment = async (commentData) => {
+    try {
+      const { id, text } = commentData;
+      const response = await axios.post(`${base_url}/addBlog/${id}/comments`, {text}, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error(
+        "Details failed:",
+        error.response ? error.response.data : error.message
+      );
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  const values = { loginUser, SignUpUser, CreateBlog, getBlogPostList, blogData,getBlogDetails,BlogDetails,getBlogCommentList,BlogCommentList,Createcomment };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
 

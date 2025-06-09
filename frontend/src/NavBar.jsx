@@ -62,7 +62,7 @@ function NavMenu() {
       }
     >
         <a className="navbar-brand text-white fw-bold" href="#">
-          <span style={{ fontSize: "24px" }}>🌐 Horizon</span>
+          <span style={{ fontSize: "24px" }}>🌐 justBlog</span>
         </a>
         <button
           className="navbar-toggler text-white"
@@ -78,18 +78,18 @@ function NavMenu() {
         >
           <ul className="navbar-nav mx-auto">
             <li className="nav-item me-5">
-              <a className="nav-link text-white" href="#">
+              <a className="nav-link text-white" href="/">
                 Home
               </a>
             </li>
             <li className="nav-item me-5">
-              <a className="nav-link text-white" href="#">
+              <a className="nav-link text-white" href="/about">
                 About Us
               </a>
             </li>
             <li className="nav-item me-5">
-              <a className="nav-link text-white" href="#">
-                Blog
+              <a className="nav-link text-white" href="/contact">
+                Contact Us
               </a>
             </li>
           </ul>

@@ -6,7 +6,7 @@ import { createComment, deleteComment, editComment, getCommentsForBlogPost } fro
 const router = Router();
 
 // Route for creating a comment on a specific blog post
-router.route("/blogs/:blogPostId/comments").post(authenticateToken, createComment);
+router.route("/addBlog/:blogPostId/comments").post(authenticateToken, createComment);
 
 // Routes for editing a specific comment
 router.route("/comments/:commentId").put(authenticateToken, editComment);
