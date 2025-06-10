@@ -5,6 +5,7 @@ import NavMenu from "./NavBar";
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import Footer from "./Footer";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./Components/Home"));
@@ -20,10 +21,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog-details/:id" element={<BlogDetails />} />
-          {/* Optional: If News route is still needed */}
-          <Route path="/news" element={<News />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </Suspense>
       <Toaster />
     </>

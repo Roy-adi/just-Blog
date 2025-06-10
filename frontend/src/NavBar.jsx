@@ -7,7 +7,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import AuthModal from "./Components/AuthModal";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function NavMenu() {
   const [showModal, setShowModal] = useState(false);
@@ -52,18 +52,18 @@ function NavMenu() {
     <>
       {/* Desktop Nav */}
       <nav
-      className={`navbar navbar-expand-lg ${
-        isHome ? "navbar-light bg-transparent" : "navbar-dark bg-black"
-      } px-4`}
-      style={
-        isHome
-          ? { position: "absolute", width: "100%", zIndex: 10 }
-          : { width: "100%" }
-      }
+       className={`navbar navbar-expand-lg ${
+    isHome ? "navbar-light bg-transparent" : "navbar-dark bg-black"
+  } px-4 d-none d-lg-flex`} // hides on mobile, shows on desktop
+  style={
+    isHome
+      ? { position: "absolute", width: "100%", zIndex: 10 }
+      : { width: "100%" }
+  }
     >
-        <a className="navbar-brand text-white fw-bold" href="#">
+        <Link className="navbar-brand text-white fw-bold" to="/">
           <span style={{ fontSize: "24px" }}>🌐 justBlog</span>
-        </a>
+        </Link>
         <button
           className="navbar-toggler text-white"
           type="button"
@@ -78,25 +78,25 @@ function NavMenu() {
         >
           <ul className="navbar-nav mx-auto">
             <li className="nav-item me-5">
-              <a className="nav-link text-white" href="/">
+              <Link className="nav-link text-white" to="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item me-5">
-              <a className="nav-link text-white" href="/about">
+              <Link className="nav-link text-white" to="/about">
                 About Us
-              </a>
+              </Link>
             </li>
             <li className="nav-item me-5">
-              <a className="nav-link text-white" href="/contact">
+              <Link className="nav-link text-white" to="/contact">
                 Contact Us
-              </a>
+              </Link>
             </li>
           </ul>
           <div className="d-flex align-items-center">
             <input
               type="text"
-              placeholder="Search destination..."
+              placeholder="Search..."
               className="form-control me-5"
               style={{
                 width: "220px",
@@ -115,7 +115,7 @@ function NavMenu() {
               </button>
             ) : (
               <>
-                <span style={{ marginRight: "15px", fontWeight: "bold" }}>
+                <span className={`${isHome ? 'text-black' : "text-white"}`} style={{ marginRight: "15px", fontWeight: "bold" }}>
                   Welcome, {userName}
                 </span>
                 <Button
@@ -134,18 +134,18 @@ function NavMenu() {
       </nav>
       {/* Mobile Nav */}
       <nav
-        className="navbar navbar-expand-lg navbar-dark d-flex d-lg-none"
-        style={{
-          backgroundColor: "rgb(0 0 0 / 70%)",
-          padding: "10px 15px",
-          position: "absolute",
-          width: "100%",
-          zIndex: 10,
-        }}
-      >
-        <a className="navbar-brand fw-bold text-white" href="#">
-          <span style={{ fontSize: "20px" }}>🌐 Horizon</span>
-        </a>
+      className={`navbar navbar-expand-lg ${
+    isHome ? "navbar-light bg-transparent" : "navbar-dark bg-black"
+  } px-4 d-flex d-lg-none`} // visible on mobile, hidden on desktop
+  style={
+    isHome
+      ? { position: "absolute", width: "100%", zIndex: 10 }
+      : { width: "100%" }
+  }
+>
+        <Link className="navbar-brand fw-bold text-white" to="#">
+          <span style={{ fontSize: "20px" }}>🌐 justBlog</span>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -161,34 +161,49 @@ function NavMenu() {
         <div className="collapse navbar-collapse" id="mobileNav">
           <ul className="navbar-nav text-center">
             <li className="nav-item">
-              <a className="nav-link text-white" href="#">
+              <Link className="nav-link text-white" to="/">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-white" href="#">
+              <Link className="nav-link text-white" to="/about">
                 About Us
-              </a>
+              </Link>
             </li>
-            <li className="nav-item">
-              <a className="nav-link text-white" href="#">
-                Blog
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-white" href="#">
-                Login
-              </a>
-            </li>
+            
           </ul>
 
-          <div className="d-flex flex-column align-items-start gap-2 mt-3">
+          <div className="d-flex flex-column align-items-center gap-2 mt-3 text-center">
             <input
               type="text"
-              placeholder="Search destination..."
+              placeholder="Search..."
               className="form-control"
-              style={{ borderRadius: "20px", padding: "5px 15px" }}
+              style={{ borderRadius: "20px", padding: "5px 15px",maxWidth:"70%" }}
             />
+               {!isLoggedIn ? (
+              <button
+                className="btn btn-light btn-sm rounded-pill"
+                onClick={() => setShowModal(true)}
+                style={{ fontWeight: "bold" }}
+              >
+                Login
+              </button>
+            ) : (
+              <>
+                <span className={`${isHome ? 'text-black' : "text-white"}`} style={{ marginRight: "15px", fontWeight: "bold" }}>
+                  Welcome, {userName}
+                </span>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  className="rounded-pill"
+                  onClick={handleLogout}
+                  style={{ fontWeight: "bold" }}
+                >
+                  Logout
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>

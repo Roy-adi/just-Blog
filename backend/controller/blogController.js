@@ -78,6 +78,7 @@ export const getBlogsByCategory = async (req, res) => {
 
 // Controller to edit a blog post
 export const editBlogPost = async (req, res) => {
+  console.log(req.files.image, req.body, 'edit blog');
   try {
     const { id } = req.params;
      const { title, description,category } = req.body;
@@ -102,6 +103,8 @@ export const editBlogPost = async (req, res) => {
     let blogImg = blogPost.blogImg;
     let blogImgPublicId = blogPost.blogImgPublicId; // Get existing public_id
 
+    console.log(blogImg, blogImgPublicId, title, 'edit blog post details1');
+
     // Handle image upload if a new image is provided
     if (req.files && req.files.image && req.files.image.length > 0) {
       const imageFile = req.files.image[0];
@@ -121,7 +124,6 @@ export const editBlogPost = async (req, res) => {
       // Upload the new image
       const imgUpload = await cloudinary.uploader.upload(imageFile.path, {
         resource_type: "image",
-        folder: "blog_images", // Optional: Keep consistent folder
       });
       blogImg = imgUpload.secure_url;
       blogImgPublicId = imgUpload.public_id; // Store the new public_id
@@ -139,6 +141,8 @@ export const editBlogPost = async (req, res) => {
       blogImg = null;
       blogImgPublicId = null;
     }
+
+    console.log(blogImg, blogImgPublicId, title, 'edit blog post details2');
 
     blogPost.title = title || blogPost.title;
     blogPost.category = category || blogPost.category;

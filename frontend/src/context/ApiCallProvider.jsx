@@ -31,6 +31,7 @@ export const ApiCallProvider = ({ children }) => {
         const { _id, username, email, name, accessToken } = response.data.user;
         // Store access token and name in localStorage
         localStorage.setItem("accessToken", response.data.user.accessToken);
+        localStorage.setItem("username", response.data.user.username);
         localStorage.setItem("name", response.data.user.name);
         localStorage.setItem(
           "user",
@@ -94,6 +95,28 @@ export const ApiCallProvider = ({ children }) => {
         },
       });
       toast.success(response.data.message);
+            const sendToData = {
+        category : ""
+      }
+      getBlogPostList(sendToData)
+    } catch (error) {
+      console.error(
+        "Details failed:",
+        error.response ? error.response.data : error.message
+      );
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+    const editBlog = async (id,dataToSend) => {
+    try {
+      const response = await axios.put(`${base_url}/editblog/${id}`, dataToSend, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      toast.success(response.data.message);
+      getBlogDetails(id); // Refresh blog details after editing
     } catch (error) {
       console.error(
         "Details failed:",
@@ -175,7 +198,47 @@ export const ApiCallProvider = ({ children }) => {
     }
   };
 
-  const values = { loginUser, SignUpUser, CreateBlog, getBlogPostList, blogData,getBlogDetails,BlogDetails,getBlogCommentList,BlogCommentList,Createcomment };
+    const deletecomment = async (id) => {
+    try {
+     
+      const response = await axios.delete(`${base_url}/deletecomments/${id}`,{
+        headers: {
+          Authorization: token,
+        },
+      });
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error(
+        "Details failed:",
+        error.response ? error.response.data : error.message
+      );
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+    const deleteBlog = async (commentId) => {
+    try {
+     
+      const response = await axios.delete(`${base_url}/deleteblog/${commentId}`,{
+        headers: {
+          Authorization: token,
+        },
+      });
+      toast.success(response.data.message);
+      const dataToSend = {
+        category : ""
+      }
+      getBlogPostList(dataToSend)
+    } catch (error) {
+      console.error(
+        "Details failed:",
+        error.response ? error.response.data : error.message
+      );
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+
+  const values = { loginUser, SignUpUser, CreateBlog,editBlog, getBlogPostList, blogData,getBlogDetails,BlogDetails,getBlogCommentList,BlogCommentList,Createcomment,deletecomment,deleteBlog };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
 

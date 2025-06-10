@@ -6,6 +6,7 @@ import { useApiCallContext } from "../context/ApiCallProvider";
 import demoImg from "../assets/blogHero.jpg";
 import userimg from "../assets/user.jpg";
 import { useNavigate } from "react-router-dom";
+
 const categories = [
   "All",
   "Technology",
@@ -37,7 +38,7 @@ const BlogSection = () => {
     getBlogPostList(datatoSend);
   }, [activeCategory]);
 
-  console.log(blogData, "blogData");
+    
 
   return (
     <>
@@ -62,7 +63,7 @@ const BlogSection = () => {
                   borderRadius: "20px",
                   fontSize: "0.85rem",
                   padding: "6px 14px",
-                  width: "10%",
+                  minWidth: "15%",
                 }}
               >
                 {cat}
@@ -71,10 +72,10 @@ const BlogSection = () => {
             <button
               className="btn btn-sm btn-dark"
               style={{
-                borderRadius: "20px",
-                fontSize: "0.85rem",
-                padding: "6px 14px",
-                width: "15%",
+                    borderRadius: "20px",
+                  fontSize: "0.85rem",
+                  padding: "6px 14px",
+                  minWidth: "30%",
               }}
               onClick={() => setShowModal(true)}
             >
@@ -115,7 +116,6 @@ const BlogSection = () => {
           </div>
         </div>
 
-        {/* Blog Cards */}
         {/* Blog Cards */}
         <div className="row">
           {blogData?.blogs?.length === 0 ? (
@@ -216,7 +216,7 @@ const BlogSection = () => {
                       width: "10%",
                     }}
                   >
-                    Load More
+                    More
                   </button>
                 </div>
               )}
@@ -227,6 +227,7 @@ const BlogSection = () => {
 
       {/* add blog Modal Called Here */}
       <AddBlogModal show={showModal} handleClose={handleClose} />
+     
     </>
   );
 };

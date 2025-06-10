@@ -16,7 +16,7 @@ router.route("/blogs/:blogPostId/comments").get(getCommentsForBlogPost);
 
 // Routes for delete a specific comment
 
-router.route("/comments/:commentId").delete(authenticateToken, deleteComment);
+router.route("/deletecomments/:commentId").delete(authenticateToken, deleteComment);
 
 // Export the router to be used in the main app
 export default router;
