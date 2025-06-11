@@ -191,7 +191,7 @@ const BlogSection = () => {
 
                       <div className="d-flex align-items-center mt-3">
                         <img
-                          src={post.userimg || userimg}
+                          src={post.authorDetails.imageUrl || userimg}
                           alt={post.author}
                           className="rounded-circle me-2"
                           style={{ width: "32px", height: "32px" }}

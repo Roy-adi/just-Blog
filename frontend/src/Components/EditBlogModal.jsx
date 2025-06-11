@@ -71,7 +71,7 @@ const EditBlogModal = ({ show, handleClose , BlogDetails }) => {
   return (
     <Modal show={show} onHide={handleClose} size="lg" backdrop="static">
       <Modal.Header closeButton>
-        <Modal.Title>Add Blog</Modal.Title>
+        <Modal.Title>Edit Blog</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>

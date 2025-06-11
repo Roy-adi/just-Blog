@@ -55,23 +55,64 @@ export const getBlogsByCategory = async (req, res) => {
   try {
     const { category } = req.body;
 
-    let filter = {};
+    // Define match condition
+    let matchStage = {};
     if (category && category.trim().toLowerCase() !== "all" && category.trim() !== "") {
-      filter.category = category;
+      matchStage.category = category;
     }
 
-    const blogs = await BlogPost.find(filter);
+    const blogs = await BlogPost.aggregate([
+      { $match: matchStage },
+      {
+        $lookup: {
+          from: "users", // MongoDB collection name (check if it's plural lowercase)
+          localField: "authorid",
+          foreignField: "_id",
+          as: "authorDetails"
+        }
+      },
+      {
+        $unwind: {
+          path: "$authorDetails",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $project: {
+          title: 1,
+          blogImg: 1,
+          blogImgPublicId: 1,
+          description: 1,
+          category: 1,
+          authorid: 1,
+          authorname: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          authorDetails: {
+            _id: 1,
+            name: 1,
+            username: 1,
+            imageUrl: 1,
+            email: 1,
+            gender: 1,
+          }
+        }
+      },
+      { $sort: { createdAt: -1 }}
+    ]);
+
 
     return res.status(200).json({
       success: true,
       count: blogs.length,
-      blogs,
+      blogs
     });
+
   } catch (error) {
     console.error("Error fetching blogs by category:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error.",
+      message: "Internal server error."
     });
   }
 };
